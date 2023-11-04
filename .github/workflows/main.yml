@@ -1,4 +1,6 @@
-# 触发条件：在代码 push 到 master 分支后，自动执行该 workflow
+name: Deploy GitHub Pages
+
+# 触发条件：在 push 到 master 分支后
 on:
   push:
     branches:
@@ -7,36 +9,14 @@ on:
 # 任务
 jobs:
   build-and-deploy:
-    # 服务器环境：最新版 Ubuntu，也可以自定义版本
+    # 服务器环境：最新版 Ubuntu
     runs-on: ubuntu-latest
     steps:
       # 拉取代码
       - name: Checkout
         uses: actions/checkout@v2
         with:
-          fetch-depth: 0
-
-      # 设置 Node.js 版本
-      - name: Setup Node.js environment
-        uses: actions/setup-node@v1
-        with:
-          node-version: "18.18.2"
-
-      # 缓存 node_modules
-      - name: Cache dependencies
-        uses: actions/cache@v2
-        id: yarn-cache
-        with:
-          path: |
-            **/node_modules
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
-
-      # 如果缓存没有命中，安装依赖
-      - name: Install dependencies
-        if: steps.yarn-cache.outputs.cache-hit != 'true'
-        run: yarn --frozen-lockfile
+          persist-credentials: false
 
       # 生成静态文件
       - name: Build
