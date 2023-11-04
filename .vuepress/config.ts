@@ -51,7 +51,7 @@ export default defineUserConfig({
           { text: "Java框架", link: "/docs/Java/Spring" },
           { text: "微服务", link: "/docs/Java/Java" },
           { text: "设计模式", link: "/docs/Java/Java" }
-        ]
+        ] 
       },
       {
         text: "数据库",
