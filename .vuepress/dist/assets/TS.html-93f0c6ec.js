@@ -1,0 +1,1 @@
+import{_ as e,o as t,c,a as o}from"./app-28f69e75.js";const _={},s=o("p",null,"后继慢慢补充。。。",-1),n=[s];function a(r,l){return t(),c("div",null,n)}const f=e(_,[["render",a],["__file","TS.html.vue"]]);export{f as default};

@@ -1,0 +1,1 @@
+import{_ as t,o as c,c as a,a as e,b as o}from"./app-28f69e75.js";const s={},n=e("h1",{id:"juc",tabindex:"-1"},[e("a",{class:"header-anchor",href:"#juc","aria-hidden":"true"},"#"),o(" JUC")],-1),r=e("p",null,"juc",-1),_=[n,r];function d(i,l){return c(),a("div",null,_)}const u=t(s,[["render",d],["__file","JUC.html.vue"]]);export{u as default};
