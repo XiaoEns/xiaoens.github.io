@@ -11,9 +11,6 @@ export default defineUserConfig({
     logo: "/logo.png",
     author: "老羊肖恩",
     authorAvatar: "/logo.png",
-    docsRepo: "https://github.com/vuepress-reco/vuepress-theme-reco-next",
-    docsBranch: "main",
-    docsDir: "example",
     lastUpdatedText: "",
     // series 为原 sidebar
     series: {
