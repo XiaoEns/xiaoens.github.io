@@ -55,4 +55,4 @@ jobs:
         with:
           ssh-key: ${{ secrets.ACCESS_TOKEN }}
           branch: gh-pages
-          folder: docs/.vuepress/dist
+          folder: docs/.vuepress/dist/
