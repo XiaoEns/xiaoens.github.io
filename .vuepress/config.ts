@@ -14,6 +14,7 @@ export default defineUserConfig({
     docsRepo: "https://github.com/XiaoEns/xiaoens.github.io",
     docsBranch: "gh-pages",
     docsDir: "docs",
+
     lastUpdatedText: "",
     // series 为原 sidebar
     series: {
@@ -51,7 +52,7 @@ export default defineUserConfig({
           { text: "Java框架", link: "/docs/Java/Spring" },
           { text: "微服务", link: "/docs/Java/Java" },
           { text: "设计模式", link: "/docs/Java/Java" }
-        ]
+        ] 
       },
       {
         text: "数据库",
