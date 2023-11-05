@@ -6,6 +6,7 @@ export default defineUserConfig({
   title: "老羊肖恩",
   description: "老羊肖恩的个人博客",
   head: [['link', { rel: 'icon', href: '/favicon.ico' }],],
+  base: "/xiaoens.github.io/",
   theme: recoTheme({
     style: "@vuepress-reco/style-default",
     logo: "/logo.png",
