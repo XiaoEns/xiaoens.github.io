@@ -1,0 +1,1 @@
+import{_ as t,o,c as _,a as e}from"./app-85b42c4b.js";const c={},s=e("p",null,"新时代三无青年，致力于祖国新事业，为建设美丽新中国添砖Java",-1),n=e("p",null,"关于我",-1),a=[s,n];function l(r,u){return o(),_("div",null,a)}const i=t(c,[["render",l],["__file","AboutMe.html.vue"]]);export{i as default};
