@@ -12,7 +12,7 @@ bannerBrand:
   description: 欢迎来到老羊肖恩的博客
   tagline: 种一棵树最好的时间是十年前，其次是现在
   buttons:
-    - { text: 关于我, link: '/blogs/myself/AboutMe' }
+    - { text: 关于我, link: '/docs/blogs/myself/AboutMe' }
 blog:
   socialLinks:
     - { icon: 'LogoGithub', link: 'https://xiaones.github.io/' }

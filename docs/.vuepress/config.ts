@@ -6,7 +6,7 @@ export default defineUserConfig({
   title: "老羊肖恩",
   description: "老羊肖恩的个人博客",
   head: [['link', { rel: 'icon', href: '/favicon.ico' }],],
-  base: "/xiaoens.github.io/",
+  // base: "/xiaoens.github.io/",
   theme: recoTheme({
     style: "@vuepress-reco/style-default",
     logo: "/logo.png",
@@ -19,7 +19,7 @@ export default defineUserConfig({
     lastUpdatedText: "",
     // series 为原 sidebar
     series: {
-      "/docs/Java/": [
+      "/books/Java/": [
         {
           text: "Java基础",
           children: ["Java", "JAVA8"]
@@ -49,23 +49,23 @@ export default defineUserConfig({
       {
         text: "Java",
         children: [
-          { text: "Java", link: "/docs/Java/Java" },
-          { text: "Java框架", link: "/docs/Java/Spring" },
-          { text: "微服务", link: "/docs/Java/Java" },
-          { text: "设计模式", link: "/docs/Java/Java" }
+          { text: "Java", link: "/books/Java/Java" },
+          { text: "Java框架", link: "/books/Java/Spring" },
+          { text: "微服务", link: "/books/Java/Java" },
+          { text: "设计模式", link: "/books/Java/Java" }
         ] 
       },
       {
         text: "数据库",
         children: [
-          { text: "MySQL", link: "/docs/DataBase/MySQL" },
-          { text: "Redis", link: "/docs/DataBase/Redis" },
+          { text: "MySQL", link: "/books/DataBase/MySQL" },
+          { text: "Redis", link: "/books/DataBase/Redis" },
         ]
       },
       {
         text: "前端", children: [
-          { text: "JS", link: "/docs/Front/JS" },
-          { text: "TS", link: "/docs/Front/TS" },
+          { text: "JS", link: "/books/Front/JS" },
+          { text: "TS", link: "/books/Front/TS" },
         ]
       },
       {
