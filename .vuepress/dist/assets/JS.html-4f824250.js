@@ -1,1 +1,0 @@
-const t=JSON.parse('{"key":"v-8deb4de2","path":"/docs/Front/JS.html","title":"JavaScript","lang":"en-US","frontmatter":{"title":"JavaScript","date":"2023/11/04"},"headers":[],"git":{"createdTime":1699105616000,"updatedTime":1699105616000,"contributors":[{"name":"xiaoen","email":"3219405547@qq.com","commits":1}]},"filePathRelative":"docs/Front/JS.md"}');export{t as data};

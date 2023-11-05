@@ -1,1 +1,0 @@
-const e=JSON.parse('{"key":"v-6beeacce","path":"/docs/Front/TS.html","title":"TypeScript","lang":"en-US","frontmatter":{"title":"TypeScript","date":"2023/11/04"},"headers":[],"git":{"createdTime":1699105616000,"updatedTime":1699105616000,"contributors":[{"name":"xiaoen","email":"3219405547@qq.com","commits":1}]},"filePathRelative":"docs/Front/TS.md"}');export{e as data};

@@ -1,1 +1,0 @@
-const a=JSON.parse('{"key":"v-f5843a16","path":"/docs/Java/Java8.html","title":"Java8新特性","lang":"en-US","frontmatter":{"title":"Java8新特性","date":"2023/11/04"},"headers":[],"git":{"createdTime":1699105616000,"updatedTime":1699105616000,"contributors":[{"name":"xiaoen","email":"3219405547@qq.com","commits":1}]},"filePathRelative":"docs/Java/Java8.md"}');export{a as data};
