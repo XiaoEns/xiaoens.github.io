@@ -1,4 +1,4 @@
-export const data = JSON.parse("{\"key\":\"v-a08058aa\",\"path\":\"/books/Java/SpringBoot.html\",\"title\":\"SpringBoot\",\"lang\":\"en-US\",\"frontmatter\":{\"title\":\"SpringBoot\",\"date\":\"2023/11/04\"},\"headers\":[],\"git\":{\"createdTime\":null,\"updatedTime\":null,\"contributors\":[]},\"filePathRelative\":\"books/Java/SpringBoot.md\"}")
+export const data = JSON.parse("{\"key\":\"v-a08058aa\",\"path\":\"/books/Java/SpringBoot.html\",\"title\":\"SpringBoot\",\"lang\":\"en-US\",\"frontmatter\":{\"title\":\"SpringBoot\",\"date\":\"2023/11/04\"},\"headers\":[],\"git\":{\"createdTime\":1699165772000,\"updatedTime\":1699165772000,\"contributors\":[{\"name\":\"xiaoen\",\"email\":\"3219405547@qq.com\",\"commits\":1}]},\"filePathRelative\":\"books/Java/SpringBoot.md\"}")
 
 if (import.meta.webpackHot) {
   import.meta.webpackHot.accept()

@@ -33,6 +33,12 @@ export default defineUserConfig({
           children: ["Spring", "SpringMVC", "SpringBoot"]
         }
       ],
+      "/books/Java/DesignPatterns": [
+        {
+          text: "设计模式",
+          children: ["DesignPatterns"]
+        }
+      ]
       // "/docs/theme-reco/": [
       //   {
       //     text: "module one",
@@ -52,7 +58,7 @@ export default defineUserConfig({
           { text: "Java", link: "/books/Java/Java" },
           { text: "Java框架", link: "/books/Java/Spring" },
           { text: "微服务", link: "/books/Java/Java" },
-          { text: "设计模式", link: "/books/Java/Java" }
+          { text: "设计模式", link: "/books/Java/DesignPatterns" }
         ] 
       },
       {
