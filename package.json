@@ -6,7 +6,7 @@
   "author": "reco_luan <recoluan@outlook.com>",
   "license": "MIT",
   "scripts": {
-    "dev": "vuepress dev docs --temp .temp",  
+    "dev": "vuepress dev docs",
     "build": "vuepress build docs"
   },
   "dependencies": {

@@ -33,6 +33,20 @@ export default defineUserConfig({
           children: ["Spring", "SpringMVC", "SpringBoot"]
         }
       ],
+      "/books/Go/": [
+        {
+          text: "Go基础",
+          children: ["base"]
+        },
+        {
+          text: "数据库",
+          children: ["go-mysql"]
+        },
+        {
+          text: "GoWeb",
+          children: ["goWeb"]
+        }
+      ],
       "/books/Java/DesignPatterns": [
         {
           text: "设计模式",
@@ -60,6 +74,12 @@ export default defineUserConfig({
           { text: "微服务", link: "/books/Java/Java" },
           { text: "设计模式", link: "/books/Java/DesignPatterns" }
         ] 
+      },
+      {
+        text: "Go",
+        children: [
+          { text: "Go基础", link: "/books/Go/base" },
+        ]
       },
       {
         text: "数据库",
