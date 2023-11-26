@@ -95,13 +95,9 @@ export default defineUserConfig({
         ]
       },
       {
-        text: "博客", children: [
-          { text: "关于我", link: "/blogs/myself/AboutMe" },
-          // { text: "分类", link: "/categories/reco/1/" },
-          // { text: "标签", link: "/tags/tag1/1" },
-        ]
+        text: "博客", link: "/categories/suibi/1/"
       },
-      { text: "时间轴", link: "/时间轴/" },
+      { text: "时间轴", link: "/timeline" },
       // {
       //   text: "Docs",
       //   children: [

@@ -1,6 +1,6 @@
 ---
 title: git
-date: 2016/12/15
+date: 2023/11/15
 tags:
  - Git
 categories:
