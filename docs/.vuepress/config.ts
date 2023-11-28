@@ -86,6 +86,7 @@ export default defineUserConfig({
         children: [
           { text: "MySQL", link: "/books/DataBase/MySQL" },
           { text: "Redis", link: "/books/DataBase/Redis" },
+          { text: "MongoDB", link: "/books/DataBase/MongoDB" },
         ]
       },
       {
