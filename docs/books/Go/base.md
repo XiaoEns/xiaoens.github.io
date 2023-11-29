@@ -264,7 +264,7 @@ func Atoi(s string) (int, error) {....}
 ```go
 // Println函数的声明
 // ... 表示函数的参数的数量是可变的 
-参数 a 的类型为 interface{}，是一个空接口
+// 参数 a 的类型为 interface{}，是一个空接口
 
 func Println(a ...interface{}) (n int, err error) {
 	return Fprintln(os.Stdout, a...)
@@ -685,11 +685,11 @@ Go 语言的 nil，比以往语言中的 null  更为友好，并且用的没那
 
 ## Error
 + Go 语言允许函数和方法同时返回多个值
-+ 按照惯例，函数在返回错误时，最后边的返回值应用来表示错误
++ 按照惯例，函数在返回错误时，最后边的返回值应用来表示错误，且这个值是一个内置类型 error
 + 调用函数后，应立即检查是否发生错误
   + 如果没有错误发生，那么返回的错误值为 nil
 + 当错误发生时，函数返回的其它值通常就不再可信
-+ 减少错误处理代码的一种策略是：将程序中不会出错的部分和包含潜在错误隐患的部分隔离开来。
++ 减少错误处理代码的一种策略是：将程序中不会出错的部分和包含潜在错误隐患的部分隔离开来
 + 对于不得不返回错误的代码，应尽力简化相应的错误处理代码
 
 ```go
@@ -715,22 +715,212 @@ func main() {
 }
 ```
 
+### 自定义错误类型
+error 类型是一个内置的接口：任何类型只要实现了返回 string 的 Error() 方法就满足了该接口。
+可以创建新的错误类型。
+
+按照惯例，自定义错误类型的名字应以 Error 结尾，有时候名字就是 Error，例如  url.Error
+
+```go
+// The error built-in interface type is the conventional interface for
+// representing an error condition, with the nil value representing no error.
+type error interface {
+	Error() string
+}
+```
+
+### 保持冷静并继续
+为了防止 panic 导致程序崩溃，Go 提供了 recover 函数。
+
+defer 的动作会在函数返回前执行，即使发生了 panic，但如果 defer 的函数调用了 recover，panic 就会停止，程序将继续运行。
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+
+	defer func() {
+		if e := recover(); e != nil {
+			fmt.Println(e) // I forgot my towel
+		}
+	}()
+
+	panic("I forgot my towel")
+}
+```
+
+## defer 
+
++ defer 关键字，可以确保所有 deferred 的动作可以在函数返回前执行
++ 可以 defer 任意的函数和方法
++ defer 并不是专门做错误处理的
++ defer 可以消除必须时刻惦记执行资源释放的负担
+
+```go
+package main
+
+import (
+	"fmt"
+	"os"
+)
+
+func proverbs(name string) error {
+	f, err := os.Create(name) // 创建名为 name 的文件
+	if err != nil {
+		return err
+	}
+	defer f.Close() // defer 关键字确保 f.Close() 被调用
+
+	_, err = fmt.Fprintln(f, "Errors are values.")
+	if err != nil {
+		return err
+	}
+
+	_, err = fmt.Fprintln(f, "Don't just check errors, handle them gracefully.")
+	return err
+}
+
+func main() {
+	err := proverbs("proverbs.txt")
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+}
+```
 
 ## goroutine
-在 Go 中，独立的任务叫做 goroutine
-虽然 goroutine 与其它语言中的协程、进程、线程都有相似之处，但 goroutine 和它们并不完全相同
-Goroutine 创建效率非常高
-Go 能直截了当的协同多个并发（concurrent）操作
-在某些语言中，将顺序式代码转化为并发式代码需要做大量修改
-在 Go 里，无需修改现有顺序式的代码，就可以通过 goroutine 以并发的方式运行任意数量的任务。
++ 在 Go 中，独立的任务叫做 goroutine
+  + 虽然 goroutine 与其它语言中的协程、进程、线程都有相似之处，但 goroutine 和它们并不完全相同
+  + Goroutine 创建效率非常高
+  + Go 能直截了当的协同多个并发（concurrent）操作
++ 在某些语言中，将顺序式代码转化为并发式代码需要做大量修改
++ 在 Go 里，无需修改现有顺序式的代码，就可以通过 goroutine 以并发的方式运行任意数量的任务
 
-每次使用 go 关键字都会产生一个新的 goroutine。
-表面上看，goroutine 似乎在同时运行，但由于计算机处理单元有限，其实技术上来说，这些 goroutine 不是真的在同时运行。
-计算机处理器会使用“分时”技术，在多个 goroutine 上轮流花费一些时间。
-在使用 goroutine 时，各个 goroutine 的执行顺序无法确定。
+```go
+package main
 
+import (
+	"fmt"
+	"time"
+)
+
+func main() {
+	for i := 0; i <= 5; i++ {
+		go sleepyGopher(i)
+	}
+	time.Sleep(4 * time.Second)
+	// 输出结果无法预测
+	/**
+	...snore...  1
+	...snore...  3
+	...snore...  2
+	...snore...  4
+	...snore...  5
+	...snore...  0
+	*/
+}
+
+func sleepyGopher(id int) {
+	time.Sleep(3 * time.Second)
+	fmt.Println("...snore... ", id)
+}
+```
 
 ## channel
++ 通道（channel）可以在多个 goroutine 之间安全的传值
++ 通道可以用作变量、函数参数、结构体字段…
++ 创建通道用 make 函数，并指定其传输数据的类型
+  + `c := make(chan int)`
++ 关闭通道：`close(chan)`
+```go
+package main
 
+import (
+	"fmt"
+	"time"
+)
 
-## 并发状态
+func main() {
+	c := make(chan int)
+	for i := 1; i <= 5; i++ {
+		go sleepyGopher(i, c)
+	}
+	for i := 1; i <= 5; i++ {
+		gopherId := <-c // 从通道接收值
+		fmt.Println("gopher ", gopherId, " has finished sleeping")
+	}
+}
+
+func sleepyGopher(id int, c chan int) {
+	time.Sleep(3 * time.Second)
+	fmt.Println("...snore... ", id)
+	c <- id // 向通道发送值
+}
+/*
+...snore...  5
+gopher  5  has finished sleeping
+...snore...  4
+gopher  4  has finished sleeping
+...snore...  1
+gopher  1  has finished sleeping
+...snore...  3
+gopher  3  has finished sleeping
+...snore...  2
+gopher  2  has finished sleeping
+ */
+```
+![Alt text](image/base/image2.png)
+### select 处理通道
++ 等待不同类型的值
++ select 和 switch 有点像
+  + 该语句包含的每个 case 都持有一个通道，用来发送或接收数据
+  + select 会等待直到某个 case 分支的操作就绪，然后就会执行该 case 分支
++ **注意**：即使已经停止等待 goroutine，但只要 main 函数还没返回，仍在运行的 goroutine 将会继续占用内存
++ select 语句在不包含任何 case 的情况下将永远等下去
+
+```go
+package main
+
+import (
+	"fmt"
+	"math/rand"
+	"time"
+)
+
+func main() {
+	c := make(chan int)
+	for i := 1; i <= 5; i++ {
+		go sleepyGopher(i, c)
+	}
+
+	// time.After 函数，返回一个通道，该通道在指定时间后会接收到一个值
+	timeout := time.After(2 * time.Second)
+	for i := 1; i <= 5; i++ {
+		select {
+		case gopherId := <-c:
+			fmt.Println("gopher ", gopherId, " has finished sleeping")
+		case <-timeout:
+			fmt.Println("my patience ran out")
+			return
+		}
+	}
+	/*  运行结果：
+		gopher  4  has finished sleeping
+		my patience ran out
+	*/
+}
+
+func sleepyGopher(id int, c chan int) {
+	time.Sleep(time.Duration(rand.Intn(4000)) * time.Millisecond)
+	c <- id // 向通道发送值
+}
+```
+
+## 阻塞和死锁
++ 当 goroutine 在等待通道的发送或接收时，我们就说它被阻塞了
++ 除了 goroutine 本身占用少量的内存外，被阻塞的 goroutine 并不消耗任何其它资源
+  + goroutine 静静的停在那里，等待导致其阻塞的事情来解除阻塞
++ 当一个或多个 goroutine 因为某些永远无法发生的事情被阻塞时，我们称这种情况为死锁。而出现死锁的程序通常会崩溃或挂起

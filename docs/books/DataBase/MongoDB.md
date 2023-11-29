@@ -27,3 +27,15 @@ storage:
 net:
 	port: 27017
 ```
+
+
+```java
+    public int mySqrt(int x) {
+		int l = 0, r = x;
+		while (l < r) {
+			int mid = l + (r - l) >> 1;
+			if (mid * mid )
+		}
+    }
+
+```
