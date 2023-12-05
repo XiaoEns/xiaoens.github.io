@@ -76,10 +76,10 @@ export default defineUserConfig({
         ] 
       },
       {
-        text: "Go",
-        children: [
-          { text: "Go基础", link: "/books/Go/base" },
-        ]
+        text: "Go", link: "/books/Go/base"
+        // children: [
+        //   { text: "Go基础", link: "/books/Go/base" },
+        // ]
       },
       {
         text: "数据库",
