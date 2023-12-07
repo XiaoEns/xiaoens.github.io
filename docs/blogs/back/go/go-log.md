@@ -1,5 +1,5 @@
 ---
-title: Go log 包进行日志记录 
+title: Go log 日志操作
 date: 2023/12/7
 tags:
  - Go
