@@ -1,5 +1,5 @@
 ---
-title: MySQL 索引 & 分库分表 
+title: SQL 优化
 date: 2023/12/9
 tags:
  - MySQL
