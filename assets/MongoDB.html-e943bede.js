@@ -1,0 +1,30 @@
+import{_ as n,o as s,c as a,e}from"./app-2eca34d6.js";const t={},i=e(`<h2 id="介绍" tabindex="-1"><a class="header-anchor" href="#介绍" aria-hidden="true">#</a> 介绍</h2><p>MongoDB是什么？</p><ul><li>文档数据库</li><li>NoSQL类型</li><li>由 C++ 编写的开源数据库系统</li></ul><p>特点：</p><ul><li>面向文档</li><li>高性能</li><li>高可用</li><li>丰富的查询语句</li><li>支持主流开发语言</li><li>支持索引</li></ul><h2 id="基本操作" tabindex="-1"><a class="header-anchor" href="#基本操作" aria-hidden="true">#</a> 基本操作</h2><h3 id="数据库" tabindex="-1"><a class="header-anchor" href="#数据库" aria-hidden="true">#</a> 数据库</h3><div class="language-sql line-numbers-mode" data-ext="sql"><pre class="language-sql"><code><span class="token comment">// 创建数据库，如果不存在则创建该数据库，否则切换到该数据库</span>
+<span class="token keyword">use</span> database_name
+
+<span class="token comment">// 查看所有数据库</span>
+<span class="token keyword">show</span> dbs
+
+<span class="token comment">// 删除当前数据库</span>
+db<span class="token punctuation">.</span>dropDatabase<span class="token punctuation">(</span><span class="token punctuation">)</span>
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h3 id="集合" tabindex="-1"><a class="header-anchor" href="#集合" aria-hidden="true">#</a> 集合</h3><div class="language-sql line-numbers-mode" data-ext="sql"><pre class="language-sql"><code><span class="token comment">// 创建集合，两个参数：name, {capped: 是否创建固定集合, autoIndexId: 是否自动在_id字段创建索引, size: 集合最大值, max: 文档最大数量}</span>
+db<span class="token punctuation">.</span>createCollection<span class="token punctuation">(</span><span class="token string">&quot;collection1&quot;</span><span class="token punctuation">,</span> {capped: <span class="token boolean">true</span><span class="token punctuation">,</span> autoIndexId: <span class="token boolean">true</span><span class="token punctuation">,</span> size: <span class="token number">1024</span><span class="token punctuation">,</span> max: <span class="token number">10</span>}<span class="token punctuation">)</span>
+
+<span class="token comment">// 查看集合</span>
+<span class="token keyword">show</span> collections
+
+<span class="token comment">// 删除集合</span>
+db<span class="token punctuation">.</span>collection1<span class="token punctuation">.</span><span class="token keyword">drop</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h3 id="文档" tabindex="-1"><a class="header-anchor" href="#文档" aria-hidden="true">#</a> 文档</h3><div class="language-sql line-numbers-mode" data-ext="sql"><pre class="language-sql"><code><span class="token comment">// 插入文档(插入的w文档，{writeConcern: true, ordered: true}) </span>
+<span class="token comment">// writeConcern：写入策略，默认为 1，即要求确认写操作，0 是不要求。</span>
+<span class="token comment">// ordered：指定是否按顺序写入，默认 true，按顺序写入。</span>
+db<span class="token punctuation">.</span>collection1<span class="token punctuation">.</span><span class="token keyword">insert</span><span class="token punctuation">(</span>{<span class="token string">&quot;name&quot;</span>:<span class="token string">&quot;张三&quot;</span><span class="token punctuation">,</span> <span class="token string">&quot;age&quot;</span>:<span class="token number">19</span><span class="token punctuation">,</span> sex: <span class="token string">&quot;男&quot;</span>}<span class="token punctuation">,</span> {writeConcern: <span class="token boolean">true</span><span class="token punctuation">,</span> ordered: <span class="token boolean">true</span>}<span class="token punctuation">)</span>
+
+<span class="token comment">// 查询文档(query：查询条件， projection:)</span>
+db<span class="token punctuation">.</span>collection1<span class="token punctuation">.</span>find<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+<span class="token comment">// 更新文档(query:更新条件，update:需要更新的数据, options:{upsert: &lt;boolean&gt;,multi: &lt;boolean&gt;,writeConcern: &lt;document&gt;})</span>
+db<span class="token punctuation">.</span>collection1<span class="token punctuation">.</span><span class="token keyword">update</span><span class="token punctuation">(</span>{<span class="token string">&#39;name&#39;</span>:<span class="token string">&#39;张一&#39;</span>}<span class="token punctuation">,</span> {$<span class="token keyword">set</span>:{<span class="token string">&#39;name&#39;</span>: <span class="token string">&quot;王二&quot;</span>}}<span class="token punctuation">)</span>
+
+<span class="token comment">// 删除文档</span>
+db<span class="token punctuation">.</span>collection1<span class="token punctuation">.</span>remove<span class="token punctuation">(</span>{<span class="token string">&#39;name&#39;</span>: <span class="token string">&#39;王二&#39;</span>}<span class="token punctuation">,</span> {justOne: <span class="token boolean">true</span>}<span class="token punctuation">)</span>
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h2 id="索引" tabindex="-1"><a class="header-anchor" href="#索引" aria-hidden="true">#</a> 索引</h2>`,13),o=[i];function l(c,p){return s(),a("div",null,o)}const d=n(t,[["render",l],["__file","MongoDB.html.vue"]]);export{d as default};

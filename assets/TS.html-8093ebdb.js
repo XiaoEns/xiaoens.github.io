@@ -1,0 +1,1 @@
+const t=JSON.parse('{"key":"v-fc20f514","path":"/books/Front/TS.html","title":"TypeScript","lang":"en-US","frontmatter":{"title":"TypeScript","date":"2023/11/04"},"headers":[],"git":{"createdTime":1704085288000,"updatedTime":1704085288000,"contributors":[{"name":"xiaoen","email":"3219405547@qq.com","commits":1}]},"filePathRelative":"books/Front/TS.md"}');export{t as data};
