@@ -44,7 +44,7 @@ export default defineUserConfig({
         },
         {
           text: "GoWeb",
-          children: ["goWeb"]
+          children: ["goWeb", "go-zero"]
         }
       ],
       "/books/Java/DesignPatterns": [
