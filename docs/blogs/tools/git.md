@@ -40,5 +40,27 @@ git push origin :分支名
 git branch --set-upstream-to=origin/远程分支 本地分支
 ```
 
+## 仓库管理
+如果远程仓库没有文件
+```shell
+git init            # 初始化git仓库
+git remote add 地址 # 设置remote地址
+git add .           # 将所有变更提交到本地仓库
+git commit -m ""    # 提交注释
+git push            # 本地仓库推送到远程仓库
+```
+
+如果远程仓库有文件
+```shell
+git init               # 初始化git仓库
+git remote add 地址    # 设置remote地址
+git pull origin master # 拉取远程仓库master的文件
+git branch --set-upstream-to=origin/master master # 将本地master与远程master分支关联
+git add .              # 将所有变更提交到本地仓库
+git commit -m ""       # 提交注释
+git push               # 本地仓库推送到远程仓库
+```
+
+
 ## 账户管理
 配置多个账号：https://blog.csdn.net/q13554515812/article/details/83506172

@@ -19,20 +19,16 @@ categories:
 + `os.Remove(path)`：删除文件/文件夹，文件夹内有文件/文件夹，也会删除
 
 ## 读取文件
+https://zhuanlan.zhihu.com/p/512052833
 
 ### 读取整个文件
+https://blog.csdn.net/lady_killer9/article/details/116454527
 
 ### 每次读取一行
 
 ### 每次读取固定字节数
 
 ## 写入文件
-
-## 压缩/解压文件
-
-### 压缩文件
-
-### 解压文件
 
 ## 其他
 
@@ -69,3 +65,13 @@ func main() {
 
 ### path/filepath 包
 推荐使用 filepath 包
+
+### os/exec 包
+https://razeen.me/posts/simple-use-go-exec-command/
+https://colobu.com/2020/12/27/go-with-os-exec/
+https://zhuanlan.zhihu.com/p/296409942
+https://before80.github.io/go_docs_with_hugo/stdLib/os/exec/
+https://blog.csdn.net/hsy12342611/article/details/131478879
+
+### 进程相关
+https://blog.csdn.net/luis_ora/article/details/80422141
