@@ -35,16 +35,16 @@ export default defineUserConfig({
       ],
       "/books/Go/": [
         {
-          text: "Go基础",
-          children: ["base"]
+          text: "Go",
+          children: ["base", "GMP"]
         },
         {
           text: "数据库",
           children: ["go-mysql"]
         },
         {
-          text: "GoWeb",
-          children: ["goWeb", "go-zero"]
+          text: "Web",
+          children: ["goWeb", "gin", "go-zero"]
         }
       ],
       "/books/Java/DesignPatterns": [

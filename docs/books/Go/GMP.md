@@ -1,5 +1,5 @@
 ---
-title: Gin
+title: GMP
 date: 2024/01/5
 ---
 

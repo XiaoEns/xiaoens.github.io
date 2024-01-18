@@ -1,6 +1,6 @@
 ---
 title: Ubuntu
-date: 2023/1/16
+date: 2024/1/16
 tags:
  - Linux
 categories:

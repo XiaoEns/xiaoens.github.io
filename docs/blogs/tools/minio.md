@@ -1,6 +1,6 @@
 ---
 title: Minio
-date: 2023/1/18
+date: 2024/1/18
 tags:
  - Minio
 categories:
