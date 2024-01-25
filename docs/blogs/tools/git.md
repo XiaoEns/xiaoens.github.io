@@ -61,6 +61,19 @@ git commit -m ""       # 提交注释
 git push               # 本地仓库推送到远程仓库
 ```
 
+## ssh-keygen
+通过 https 克隆的项目，在 push 时需要输入用户名和密码
+
+通过 ssh 克隆的项目，在 push 时不需要输入用户名和密码，但是需要提前配置 ssh key
+
+在ssh目录（C:\Users\32194\.ssh）下打开 cmd 窗口操作
+1. 创建ssh key：`ssh-keygen -t rsa -C "your_email -f "id_ras_test"`
+   1. -t: 指定密钥类型，默认是 rsa, 可以省略
+   2. -C: 设置注释文字，比如邮箱
+2. 输入文件名，保存生成的 ssh key,默认的是id_rsa 和 id_rsa.pub 
+3. 需要输入密码，可以不输入，那么 push 的时候不需要输入密码
+4. 生成对应的文件后，需要将生成的 .pub 文件内容添加到github/gitee中
+5. 测试：`ssh -T git@github.com`
 
 ## 账户管理
 配置多个账号：https://blog.csdn.net/q13554515812/article/details/83506172

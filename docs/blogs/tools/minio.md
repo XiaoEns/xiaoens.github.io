@@ -14,6 +14,4 @@ https://www.minio.org.cn/docs/minio/linux/
 https://blog.csdn.net/qq_43279324/article/details/124525231
 
 ## 操作
-https://www.cnblogs.com/bxmm/p/16462833.html
-
 https://www.cnblogs.com/xiangningdeguang/p/16955281.html
