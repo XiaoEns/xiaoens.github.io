@@ -205,6 +205,41 @@ ziplist, skiplist
 
 
 ## 数据库
+```C++
+// Redis服务器
+struct redisServer {
+    // ...
+    // 一个数组，保存着服务器中的所有数据库
+    redisDb *db;
+    // 服务器数据库的数量,默认是16个
+    int dbnum;
+    // ...
+};
+
+// Redis数据库
+typedef struct redisDb {
+    // ...
+    // 数据库键空间（数据字典），保存着数据库中的所有键值对
+    dict *dict;
+    // 过期字典，保存着键过期的时间
+    dict *expires;
+    // ...
+} redisDb;
+```
+![Alt text](image/Redis/image8.png)
+
+### 数据库操作
++ `select index`：切换数据库，index 默认为0，表示切换到第几个数据库
++ `set key value`: 添加键值对，key 是一个字符对象，value 是 Redis 中任意对象
++ `del key`: 删除键值对
++ `set key value`: 修改键值对，存在对应的 key 时，会修改对应的值对象
++ `get key`: 获取键值对
++ `flushdb`: 清空当前数据库
++ `expire key`: 设置对象存活时间，单位 秒
++ `persist key`: 移除键的过期时间
++ `ttl key`: 返回对象的剩余存活时间，单位 秒
+
+过期键删除策略
 
 
 ## RDB 持久化
