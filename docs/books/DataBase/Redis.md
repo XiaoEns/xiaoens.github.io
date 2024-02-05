@@ -9,12 +9,12 @@ date: 2023/11/04
 Simple Dynamic String，简单动态字符串
 ```c++
 struct sdshdr {
-    //记录buf数组中已使用字节的数量
-    //等于SDS所保存字符串的长度
+    // 记录buf数组中已使用字节的数量
+    // 等于SDS所保存字符串的长度
     int len;
-    //记录buf数组中未使用字节的数量
+    // 记录buf数组中未使用字节的数量
     int free;
-    //字节数组，用于保存字符串，最后一位是空字符 '\0',不计入字符串长度
+    // 字节数组，用于保存字符串，最后一位是空字符 '\0',不计入字符串长度
     char buf[];
 };
 ```
@@ -191,18 +191,32 @@ raw 和 embstr 的区别：raw 编码会分配两次内存（分别创建redisOb
 
 ### 列表对象
 列表对象的编码可以是：ziplist, linkedlist
-+ ziplist：当列表对象中所有的字符串长度 <= 64字节，**并且**数量 <=512个，此时列表对象的 encoding 为 ziplist
++ ziplist：当列表对象中所有的字符串长度 <= 64字节，**并且**数量 <= 512个，此时列表对象的 encoding 为 ziplist
 + linkedlist：当列表对象中有一个字符串长度大于64字节，**或者**字符串数量大于512个，此时列表对象的 encoding 为 linkedlist
 
 ### 哈希对象
-ziplist, hashtable
+哈希对象的编码可以是：ziplist, hashtable
+
+当使用 ziplist 作为哈希对象的编码时，键值对的键在前，值在后
+![Alt text](image/Redis/image9.png)
+
++ ziplist：当哈希对象中所有的键和值长度 <= 64字节，**并且**键和值的数量 <= 512个，此时哈希对象的 encoding 为 ziplist
++ hashtable：当哈希对象中所有的键和值长度 > 64字节，**或者**键和值的数量 > 512个，此时哈希对象的 encoding 为 hashtable
 
 ### 集合对象
-intset, hashtable
+集合对象的编码可以是：intset, hashtable
+
++ intset：当集合对象中所有元素都是整数值，**并且**元素的数量 <= 512个，此时集合对象的 encoding 为 intset
++ hashtable：当集合对象中所有元素有一个非整数值，**或者**元素的数量 > 512个，此时集合对象的 encoding 为 hashtable
 
 ### 有序集合对象
-ziplist, skiplist
+有序集合对象的编码可以是：ziplist, skiplist
 
+当有序集合对象使用 ziplist 编码时，第一个节点保存元素，第二个节点保存分值
+![Alt text](image/Redis/image10.png)
+
++ ziplist: 当有序集合对象保存的所有元素的长度 <= 64字节，**并且**元素元素的数量 <= 512个，此时有序集合对象的 encoding 为 ziplist
++ skiplist: 当有序集合对象保存的元素的长度有一个 > 64字节，**或者**元素元素的数量 > 512个，此时有序集合对象的 encoding 为 skiplist
 
 ## 数据库
 ```C++
@@ -245,4 +259,11 @@ typedef struct redisDb {
 ## RDB 持久化
 ## AOF 持久化
 
+## 事务
+
+## 主从复制
+
+## 哨兵模式
+
+## 集群
 

@@ -1,5 +1,5 @@
 ---
-title: Goland GC
+title: Go GC
 date: 2024/01/11
 tags:
  - Go
