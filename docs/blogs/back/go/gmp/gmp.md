@@ -6,7 +6,7 @@ date: 2024/01/5
 参考链接：https://learnku.com/articles/41728
 
 ## GMP 模型
-![Alt text](image/gmp/image-1.png)
+![Alt text](image-1.png)
 
 + G: goroutine, 协程, 内存占用小, 切换速度快（切换在用户态完成）
 + M: machine thread, 内核线程
@@ -31,7 +31,7 @@ date: 2024/01/5
 在 Go 中，一个 goroutine 最多占用 CPU 10ms，防止其他 goroutine 被饿死
 
 ## 调度过程
-![Alt text](image/gmp/image.png)
+![Alt text](image.png)
 
 
 ## 调度器生命周期
@@ -44,4 +44,4 @@ date: 2024/01/5
   + 负责调度 G, 在调度或系统调用时会使用 G0 的栈空间
 
 
-![Alt text](image/gmp/image-2.png)
+![Alt text](image-2.png)

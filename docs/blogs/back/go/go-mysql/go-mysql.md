@@ -50,7 +50,7 @@ date: 2023/11/25
 
 ## 操作数据库
 目录结构
-![Alt text](image/goConnDatabase/image.png)
+![Alt text](image.png)
 
 ```go
 // main.go

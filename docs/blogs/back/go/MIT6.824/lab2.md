@@ -9,6 +9,7 @@ categories:
 
 ## 准备
 + 论文:
+  + Raft: <http://nil.csail.mit.edu/6.824/2020/papers/raft-extended.pdf>
   + GFS: <http://nil.csail.mit.edu/6.824/2020/papers/gfs.pdf>
   + Fault-Tolerant VM: <http://nil.csail.mit.edu/6.824/2020/papers/vm-ft.pdf>
 + Lab2 要求: <http://nil.csail.mit.edu/6.824/2020/labs/lab-raft.html>
@@ -30,6 +31,7 @@ Lab2 分成了3部分：
 
 ## 设计实现
 安装 Raft 论文的描述来设计 AppendEntries RPC 和 Vote RPC
+
 ```go
 type RequestVoteArgs struct {
   Term         int // 当前任期号

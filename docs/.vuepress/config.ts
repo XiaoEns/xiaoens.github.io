@@ -36,11 +36,7 @@ export default defineUserConfig({
       "/books/Go/": [
         {
           text: "Go",
-          children: ["base", "GMP"]
-        },
-        {
-          text: "数据库",
-          children: ["go-mysql"]
+          children: ["base"]
         },
         {
           text: "Web",
@@ -52,6 +48,16 @@ export default defineUserConfig({
           text: "设计模式",
           children: ["DesignPatterns"]
         }
+      ],
+      "/books/Front": [
+        {
+          text: "JavaScript",
+          children: ["JS"]
+        },
+        {
+          text: "TypeScript",
+          children: ["TS"]
+        },
       ]
       // "/docs/theme-reco/": [
       //   {
@@ -67,13 +73,13 @@ export default defineUserConfig({
     navbar: [
       { text: "Home", link: "/" },
       {
-        text: "Java",
-        children: [
-          { text: "Java", link: "/books/Java/Java" },
-          { text: "Java框架", link: "/books/Java/Spring" },
-          { text: "微服务", link: "/books/Java/Java" },
-          { text: "设计模式", link: "/books/Java/DesignPatterns" }
-        ] 
+        text: "Java", link: "/books/Java/Java"
+        // children: [
+        //   { text: "Java", link: "/books/Java/Java" },
+        //   { text: "Java框架", link: "/books/Java/Spring" },
+        //   { text: "微服务", link: "/books/Java/Java" },
+        //   { text: "设计模式", link: "/books/Java/DesignPatterns" }
+        // ] 
       },
       {
         text: "Go", link: "/books/Go/base"
@@ -82,18 +88,19 @@ export default defineUserConfig({
         // ]
       },
       {
-        text: "数据库",
-        children: [
-          { text: "MySQL", link: "/books/DataBase/MySQL" },
-          { text: "Redis", link: "/books/DataBase/Redis" },
-          { text: "MongoDB", link: "/books/DataBase/MongoDB" },
-        ]
+        text: "数据库", link: "/books/DataBase/MySQL",
+        // children: [
+        //   { text: "MySQL", link: "/books/DataBase/MySQL" },
+        //   { text: "Redis", link: "/books/DataBase/Redis" },
+        //   { text: "MongoDB", link: "/books/DataBase/MongoDB" },
+        // ]
       },
       {
-        text: "前端", children: [
-          { text: "JS", link: "/books/Front/JS" },
-          { text: "TS", link: "/books/Front/TS" },
-        ]
+        text: "前端", link: "/books/Front/JS",
+        // children: [
+        //   { text: "JS", link: "/books/Front/JS" },
+        //   { text: "TS", link: "/books/Front/TS" },
+        // ]
       },
       {
         text: "博客", link: "/categories/suibi/1/"
