@@ -1,0 +1,1 @@
+import{_ as t,o as s,c as o,a as e}from"./app-4259075f.js";const c="/assets/shellsort-919892d4.webp",_={},n=e("p",null,[e("img",{src:c,alt:"Alt text"})],-1),l=[n];function r(a,i){return s(),o("div",null,l)}const m=t(_,[["render",r],["__file","index.html.vue"]]);export{m as default};

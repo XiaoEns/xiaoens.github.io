@@ -1,0 +1,8 @@
+import{_ as n,o as s,c as a,e}from"./app-4259075f.js";const t={},o=e(`<ol><li>更新系统包</li></ol><div class="language-bash line-numbers-mode" data-ext="sh"><pre class="language-bash"><code><span class="token function">sudo</span> <span class="token function">apt</span> update
+<span class="token function">sudo</span> <span class="token function">apt</span> upgrade
+<span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> <span class="token function">curl</span> gnupg2 gnupg <span class="token function">wget</span> software-properties-common
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><ol start="2"><li>安装 Python</li></ol><div class="language-bash line-numbers-mode" data-ext="sh"><pre class="language-bash"><code><span class="token comment"># 添加 Python PPA 存储库</span>
+<span class="token function">sudo</span> add-apt-repository ppa:deadsnakes/ppa
+<span class="token comment"># 安装 Python</span>
+<span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> python3.10
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><ol start="3"><li><p>测试: <code>python3.10 --version</code></p></li><li><p>安装 pip(包管理工具)：https://www.runoob.com/w3cnote/python-pip-install-usage.html</p></li></ol>`,5),i=[o];function l(c,p){return s(),a("div",null,i)}const u=n(t,[["render",l],["__file","ubuntu-python.html.vue"]]);export{u as default};

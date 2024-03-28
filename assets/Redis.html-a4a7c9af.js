@@ -1,0 +1,170 @@
+import{_ as i,o as e,c as n,e as l}from"./app-4259075f.js";const s="/assets/image-52db2c6b.png",d="/assets/image2-ce5c1254.png",a="/assets/image5-47860610.png",r="/assets/image3-b55a179c.png",t="/assets/image4-89f7906e.png",c="/assets/image6-1744b4b3.png",v="/assets/image7-07916413.png",u="/assets/image9-1e3378aa.png",o="/assets/image10-739aafac.png",b="/assets/image8-7ce464f5.png",m="/assets/image11-35328f2a.png",h="/assets/image12-c95a20de.png",p="/assets/image13-6867d06a.png",g="/assets/image14-5c5a0399.png",f={},_=l(`<h2 id="数据结构" tabindex="-1"><a class="header-anchor" href="#数据结构" aria-hidden="true">#</a> 数据结构</h2><h3 id="sds" tabindex="-1"><a class="header-anchor" href="#sds" aria-hidden="true">#</a> SDS</h3><p>Simple Dynamic String，简单动态字符串</p><div class="language-c++ line-numbers-mode" data-ext="c++"><pre class="language-c++"><code>struct sdshdr {
+    // 记录buf数组中已使用字节的数量
+    // 等于SDS所保存字符串的长度
+    int len;
+    // 记录buf数组中未使用字节的数量
+    int free;
+    // 字节数组，用于保存字符串，最后一位是空字符 &#39;\\0&#39;,不计入字符串长度
+    char buf[];
+};
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><p>优点（对比 C 字符串）：</p><ul><li>通过 len 属性可以常数级别获取字符串长度</li><li>通过 free 属性可以防止缓冲区溢出，当追加字符串时，如果添加的字符串长度大于 free，会触发扩容操作，重新分配内存 <ul><li>当修改后的 SDS 长度小于 1MB, 会多分配相同大小的未使用空间，这时 len = free</li><li>当修改后的 SDS 长度大于 1MB, 会多分配 1MB 大小的未使用空间，这时 free = 1MB</li></ul></li><li>最大数据长度为 512 MB</li><li>惰性空间释放，减少内存分配次数，当修改字符串长度时，不会立即释放多余的内存空间</li><li>二进制安全</li><li>兼容部分 C 函数</li></ul><h3 id="链表" tabindex="-1"><a class="header-anchor" href="#链表" aria-hidden="true">#</a> 链表</h3><p>Redis 中通过链表（双向链表）实现列表键，发布与订阅，慢查询，监视器等功能</p><div class="language-C++ line-numbers-mode" data-ext="C++"><pre class="language-C++"><code>typedef struct listNode {
+    // 前置节点
+    struct listNode * prev;
+    // 后置节点
+    struct listNode * next;
+    // 节点的值
+    void * value;
+}listNode;
+
+typedef struct list {
+    // 表头节点
+    listNode * head;
+    // 表尾节点
+    listNode * tail;
+    // 链表所包含的节点数量
+    unsigned long len;
+    // 节点值复制函数
+    void *(*dup)(void *ptr);
+    // 节点值释放函数
+    void (*free)(void *ptr);
+    // 节点值对比函数
+    int (*match)(void *ptr,void *key);
+} list;
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><p><img src="`+s+`" alt="Alt text"></p><h3 id="字典" tabindex="-1"><a class="header-anchor" href="#字典" aria-hidden="true">#</a> 字典</h3><p>Redis 中的字典通过哈希表实现，每个字典中有两个哈希表，一个平时使用，另一个仅在rehash时使用。当发生哈希冲突时，通过链地址法解决冲突，并且使用的是头插法。</p><div class="language-C++ line-numbers-mode" data-ext="C++"><pre class="language-C++"><code>// 字典
+typedef struct dict {
+    //类型特定函数
+    dictType *type;
+    //私有数据
+    void *privdata;
+    //哈希表
+    dictht ht[2];
+    // rehash索引
+    //当rehash不在进行时，值为-1
+    in trehashidx; /* rehashing not in progress if rehashidx == -1 */
+} dict;
+
+// 哈希表
+typedef struct dictht {
+    // 哈希表数组
+    dictEntry **table;
+    // 哈希表大小
+    unsigned long size;
+    // 哈希表大小掩码，用于计算索引值
+    // 总是等于size-1
+    unsigned long sizemask;
+    // 该哈希表已有节点的数量
+    unsigned long used;
+} dictht;
+
+// 哈希表节点
+typedef struct dictEntry {
+    // 键
+    void *key;
+    // 值
+    union{
+        void *val;
+        uint64_tu64;
+        int64_ts64;
+    } v;
+    // 指向下个哈希表节点，形成链表
+    struct dictEntry *next;
+} dictEntry;
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><p><img src="`+d+`" alt="Alt text"></p><p>关于何时进行哈希表的扩容和收缩操作，由负载因子（<strong>哈希表节点数/哈希表大小</strong>）决定，并且需要满足以下情况：</p><ul><li>当服务器没有在执行 bgsave 或者 bgrewriteaof 命令时，并且负载因子 &gt;= 1，进行扩容操作</li><li>当服务器正在执行 bgsave 或者 bgrewriteaof 命令时，并且负载因子 &gt;= 5，进行扩容操作</li><li>当负载因子小于 0.1 是，进行收缩操作</li></ul><p>注意：</p><ul><li>哈希表的扩容和收缩操作都是渐进式的，不是一次性完成的</li><li>扩容后的哈希表大小为第一个哈希表中节点数的两倍（ht[0].used * 2）</li><li>收缩后的哈希表大小为第一个哈希表中节点数（ht[0].used * 2）</li></ul><h3 id="跳跃表" tabindex="-1"><a class="header-anchor" href="#跳跃表" aria-hidden="true">#</a> 跳跃表</h3><p>skiplist，Redis 使用跳跃表作为有序集合键的底层实现之一</p><div class="language-C++ line-numbers-mode" data-ext="C++"><pre class="language-C++"><code>// 该结构保存跳跃表信息
+typedef struct zskiplist {
+    // 表头节点和表尾节点
+    structz skiplistNode *header, *tail;
+    // 表中节点的数量
+    unsigned long length;
+    // 表中层数最大的节点的层数，表头节点的层数不计算在内
+    int level;
+} zskiplist;
+
+// 该结构保存跳跃节点信息
+typedef struct zskiplistNode {
+    // 层
+    struct zskiplistLevel {
+        // 前进指针
+        struct zskiplistNode *forward;
+        // 跨度
+        unsigned int span;
+    } level[];
+    // 后退指针
+    struct zskiplistNode *backward;
+    // 分值，通过分值进行排序，如果分值相同，通过字典序排序
+    double score;
+    // 成员对象
+    robj *obj;
+} zskiplistNode;
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><p><img src="`+a+'" alt="Alt text"></p><h3 id="压缩列表" tabindex="-1"><a class="header-anchor" href="#压缩列表" aria-hidden="true">#</a> 压缩列表</h3><p>ziplist，Redis 中为节约内存而开发的一种顺序数据结构，每一个压缩列表可以包含多个节点，每个节点可以保存字节数组或者整数值</p><p><img src="'+r+'" alt="Alt text"></p><ul><li><code>zlbytes</code>：压缩列表的字节数</li><li><code>zltail</code>：压缩列表的起始位置距离最后一个节点地址有多少字节（偏移量），可以直接确定最后一个节点位置，无需遍历</li><li><code>zllen</code>：压缩列表中的节点个数</li></ul><p><img src="'+t+`" alt="Alt text"></p><ul><li><code>previous_entry_length</code>: 前一个节点的长度，通过这个字段可以访问前一个节点</li><li><code>encoding</code>：记录该节点保存的数据是字节数组还是整数值</li><li><code>content</code>：压缩列表节点保存的数据</li></ul><h2 id="对象" tabindex="-1"><a class="header-anchor" href="#对象" aria-hidden="true">#</a> 对象</h2><p>Redis 中每个对象都由 redisObject 表示</p><div class="language-C++ line-numbers-mode" data-ext="C++"><pre class="language-C++"><code>typedef struct redisObject {
+    // 对象的类型(string, list, hash, set, zset),可以通过 type 命令查看
+    unsigned type:4;
+    // 对象的编码，该对象底层使用的是什么数据结构来实现的
+    unsigned encoding:4;
+    // 指向底层实现数据结构的指针
+    void *ptr;
+    // 引用计数，用于内存回收
+    int refcount;
+    // 记录该对象之后一次被访问的时间
+    unsigned lru:22;
+    // ...
+} robj;
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><p><img src="`+c+'" alt="Alt text"></p><h3 id="字符串对象" tabindex="-1"><a class="header-anchor" href="#字符串对象" aria-hidden="true">#</a> 字符串对象</h3><p>字符串对象的编码可以是int，raw，embstr</p><ul><li>int: 当保存的字符串是整数值，并且可以用 long 类型表示，此时字符串对象的 encoding 为 int</li><li>embstr: 当保存的字符串长度 <strong>小于等于32字节</strong>，此时字符串对象的 encoding 为 embstr</li><li>raw: 当保存的字符串长度大于 <strong>32字节</strong>，此时字符串对象的 encoding 为 raw</li></ul><p>raw 和 embstr 的区别：raw 编码会分配两次内存（分别创建redisObject和SDS），embstr 编码只会分配一次内存（同时创建redisObject和SDS）</p><p><img src="'+v+'" alt="Alt text"></p><h3 id="列表对象" tabindex="-1"><a class="header-anchor" href="#列表对象" aria-hidden="true">#</a> 列表对象</h3><p>列表对象的编码可以是：ziplist, linkedlist</p><ul><li>ziplist：当列表对象中所有的字符串长度 &lt;= 64字节，<strong>并且</strong>数量 &lt;= 512个，此时列表对象的 encoding 为 ziplist</li><li>linkedlist：当列表对象中有一个字符串长度大于64字节，<strong>或者</strong>字符串数量大于512个，此时列表对象的 encoding 为 linkedlist</li></ul><h3 id="哈希对象" tabindex="-1"><a class="header-anchor" href="#哈希对象" aria-hidden="true">#</a> 哈希对象</h3><p>哈希对象的编码可以是：ziplist, hashtable</p><p>当使用 ziplist 作为哈希对象的编码时，键值对的键在前，值在后 <img src="'+u+'" alt="Alt text"></p><ul><li>ziplist：当哈希对象中所有的键和值长度 &lt;= 64字节，<strong>并且</strong>键和值的数量 &lt;= 512个，此时哈希对象的 encoding 为 ziplist</li><li>hashtable：当哈希对象中所有的键和值长度 &gt; 64字节，<strong>或者</strong>键和值的数量 &gt; 512个，此时哈希对象的 encoding 为 hashtable</li></ul><h3 id="集合对象" tabindex="-1"><a class="header-anchor" href="#集合对象" aria-hidden="true">#</a> 集合对象</h3><p>集合对象的编码可以是：intset, hashtable</p><ul><li>intset：当集合对象中所有元素都是整数值，<strong>并且</strong>元素的数量 &lt;= 512个，此时集合对象的 encoding 为 intset</li><li>hashtable：当集合对象中所有元素有一个非整数值，<strong>或者</strong>元素的数量 &gt; 512个，此时集合对象的 encoding 为 hashtable</li></ul><h3 id="有序集合对象" tabindex="-1"><a class="header-anchor" href="#有序集合对象" aria-hidden="true">#</a> 有序集合对象</h3><p>有序集合对象的编码可以是：ziplist, skiplist</p><p>当有序集合对象使用 ziplist 编码时，第一个节点保存元素，第二个节点保存分值 <img src="'+o+`" alt="Alt text"></p><ul><li>ziplist: 当有序集合对象保存的所有元素的长度 &lt;= 64字节，<strong>并且</strong>元素元素的数量 &lt;= 512个，此时有序集合对象的 encoding 为 ziplist</li><li>skiplist: 当有序集合对象保存的元素的长度有一个 &gt; 64字节，<strong>或者</strong>元素元素的数量 &gt; 512个，此时有序集合对象的 encoding 为 skiplist</li></ul><h2 id="数据库" tabindex="-1"><a class="header-anchor" href="#数据库" aria-hidden="true">#</a> 数据库</h2><div class="language-C++ line-numbers-mode" data-ext="C++"><pre class="language-C++"><code>// Redis服务器
+struct redisServer {
+    // ...
+    // 一个数组，保存着服务器中的所有数据库
+    redisDb *db;
+    // 服务器数据库的数量,默认是16个
+    int dbnum;
+    // ...
+};
+
+// Redis数据库
+typedef struct redisDb {
+    // ...
+    // 数据库键空间（数据字典），保存着数据库中的所有键值对
+    dict *dict;
+    // 过期字典，保存着键过期的时间
+    dict *expires;
+    // ...
+} redisDb;
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><p><img src="`+b+'" alt="Alt text"></p><h3 id="数据库操作" tabindex="-1"><a class="header-anchor" href="#数据库操作" aria-hidden="true">#</a> 数据库操作</h3><ul><li><code>select index</code>：切换数据库，index 默认为0，表示切换到第几个数据库</li><li><code>set key value</code>: 添加键值对，key 是一个字符对象，value 是 Redis 中任意对象</li><li><code>del key</code>: 删除键值对</li><li><code>set key value</code>: 修改键值对，存在对应的 key 时，会修改对应的值对象</li><li><code>get key</code>: 获取键值对</li><li><code>flushdb</code>: 清空当前数据库</li><li><code>expire key</code>: 设置对象存活时间，单位 秒</li><li><code>persist key</code>: 移除键的过期时间</li><li><code>ttl key</code>: 返回对象的剩余存活时间，单位 秒</li></ul><h3 id="过期处理" tabindex="-1"><a class="header-anchor" href="#过期处理" aria-hidden="true">#</a> 过期处理</h3><p>Redis 过期键删除策略: <strong>惰性删除</strong> 和 <strong>定期删除</strong></p><blockquote><ul><li>定时删除：设置键设置过期时间时，同时设置一个定时器，当过期时间到了，就执行删除操作 <ul><li>对内存友好，会及时删除过期数据</li><li>对 CPU 不友好，在过期键比较多时，删除操作会占用过多的 CPU 时间，影响服务响应时间</li></ul></li><li>惰性删除：在获取键时，检查是否过期，如果过期了就删除，没有过期，就取出数据 <ul><li>对 CPU 友好，只有在取出键时，才会删除</li><li>对内存不友好，如果有较多过期键，又长时间没被访问，就会浪费过多内存，有内存泄漏风险</li></ul></li><li>定期删除：每隔一段时间，定期对数据库进行检查，删除过期键 <ul><li>是定时删除和惰性删除的折中，需要控制执行时长和频率</li></ul></li></ul></blockquote><p>过期键的惰性删除策略由<code>db.c/expireIfNeeded</code>函数实现，所有读写数据库的Redis命令在执行之前都会调用expireIfNeeded函数对输入键进行检查</p><p><img src="'+m+'" alt="Alt text"></p><p>过期键的定期删除策略由<code>redis.c/activeExpireCycle</code>函数实现，它在规定的时间内，分多次遍历服务器中的各个数据库，从数据库的expires字典中随机检查一部分键的过期时间，并删除其中的过期键。</p><h2 id="持久化" tabindex="-1"><a class="header-anchor" href="#持久化" aria-hidden="true">#</a> 持久化</h2><h3 id="rdb-持久化" tabindex="-1"><a class="header-anchor" href="#rdb-持久化" aria-hidden="true">#</a> RDB 持久化</h3><ul><li>save: 会阻塞主进程，在此期间无法处理任何请求</li><li>bgsave: 会 fork 子进程，由子进程来进行 RDB 操作，不会阻塞主进程</li></ul><p>RDB 文件保存的是数据库中的数据，包含键值对的对象类型信息，过期时间，存在于哪个数据库等信息</p><p>在进行RDB的过程中，主进程通过写时复制技术继续写入数据的，不会影响RDB操作。当写入数据时，操作系统会分配新的内存页，用来保存数据</p><h3 id="aof-持久化" tabindex="-1"><a class="header-anchor" href="#aof-持久化" aria-hidden="true">#</a> AOF 持久化</h3><p>AOF 文件保存的是修改数据库状态的命令，如果发送<code>set msg &quot;hello&quot;</code>这个命令，会将该命令保存到 AOF 文件中</p><p><strong>AOF 持久化实现</strong></p><ol><li>命令追加，服务器在执行完一个写命令后，会将该命令保存到 aof_buf 缓冲区中</li><li>文件写入，将 aof_buf 中的数据写入到 AOF 文件，但此时数据并没有写到磁盘上，写入的数据保存在一个内存缓冲区中（不同于 aof_buf ）</li><li>文件同步，执行<code>fsync</code>或<code>fdatasync</code>系统同步函数，可以强制让操作系统将内存缓冲区中的数据写入到磁盘上 <ol><li>always：每个事件循环都将 aof_buf 中的数据写入到 aof 文件中，并同步 aof 文件</li><li>everysec: 每个事件循环都将 aof_buf 中的数据写入到 aof 文件中，并<strong>每秒</strong>同步 aof 文件一次</li><li>no：每个事件循环都将 aof_buf 中的数据写入到 aof 文件中，但何时同步 aof 文件，由操作系统决定</li></ol></li></ol><p><strong>AOF 文件重写实现</strong></p><ol><li>执行<code>bgrewriteaof</code>命令进行 aof 文件重写，该命令会 fork 出子进程并维护 aof 重写缓冲区来保证数据的一致性</li><li>子进程会通过读取当前数据库状态，重新生成 aof 文件，来实现 aof 文件重写</li><li>子进程完成 aof 重写之后，会将 aof 重写缓存区中的数据追加到新的 aof 文件中</li><li>将新的 aof 文件替换旧的 aof 文件</li></ol><h2 id="事务" tabindex="-1"><a class="header-anchor" href="#事务" aria-hidden="true">#</a> 事务</h2><ul><li><code>mulit</code>: 开启事务</li><li><code>exec</code>: 提交事务</li></ul><p>在提交事务之前的命令会保存到一个命令数组中，在提交之后会按照FIFO的顺序执行命令数组中的命令（<strong>注意</strong>：Redis 中的事务不保证原子性）</p><h2 id="主从复制" tabindex="-1"><a class="header-anchor" href="#主从复制" aria-hidden="true">#</a> 主从复制</h2><p>为了维持 Redis 服务器之间的数据一致性</p><h3 id="同步" tabindex="-1"><a class="header-anchor" href="#同步" aria-hidden="true">#</a> 同步</h3><ul><li><strong>完整重同步：处理初次同步的情况</strong><ul><li>从服务器向主服务器发送 psync 命令</li><li>主服务器接收到 psync 命令后会 生成 RDB 文件，并发送给 从服务器</li><li>从服务器接收到 RDB 文件后，更新数据库状态</li><li>主服务器将缓冲区中的写命令发送给从服务器，从服务器执行这些命令</li></ul></li><li><strong>部分重同步：处理断线重连的情况</strong><ul><li>从服务器重连的时候，会发送 psync 命令，并带上<strong>主服务器的运行ID</strong>和<strong>复制偏移量</strong></li><li>主服务器接收到 psync 命令后，会判断运行ID是否相同 <ul><li>如果不相同，执行完全同步</li><li>如果相同，执行部分同步</li></ul></li><li>检查从服务器的复制偏移量存在于主服务器的<strong>复制积压缓冲区中（一个队列，默认大小为 1 MB）</strong><ul><li>如果不存在，进行完全同步</li><li>如果存在，将发送 +continue 回复给从服务器，表示以部分同步进行数据同步</li></ul></li><li>主服务器发送缺失数据，从服务器接收缺失数据并执行</li></ul></li></ul><h3 id="命令传播" tabindex="-1"><a class="header-anchor" href="#命令传播" aria-hidden="true">#</a> 命令传播</h3><p>主服务器通过向从服务器传播命令来更新从服务器的状态，保持主从服务器一致，而从服务器则通过向主服务器发送命令来进行心跳检测，以及命令丢失检测。</p><h2 id="哨兵模式" tabindex="-1"><a class="header-anchor" href="#哨兵模式" aria-hidden="true">#</a> 哨兵模式</h2><p>Redis2.8 后实现 哨兵模式，实现主节点故障转移。如果主节点下线，会在从节点中选举出新的主节点。 <img src="'+h+`" alt="Alt text"></p><h3 id="基本结构" tabindex="-1"><a class="header-anchor" href="#基本结构" aria-hidden="true">#</a> 基本结构</h3><div class="language-c++ line-numbers-mode" data-ext="c++"><pre class="language-c++"><code>// 保存所有和 Sentinel 功能有关的状态
+struct sentinelState {
+    // 当前纪元，用于实现故障转移
+    uint64_t current_epoch;
+    // 保存了所有被这个sentinel监视的主服务器 (key: 主服务器的名字  value: 一个指向sentinelRedisInstance结构的指针)
+    dict *masters;
+    // 是否进入了TILT模式
+    int tilt;
+    // 目前正在执行的脚本的数量
+    int running_scripts;
+    // 进入TILT模式的时间
+    mstime_t tilt_start_time;
+    // 最后一次执行时间处理器的时间
+    mstime_t previous_time;
+    // 一个FIFO队列，包含了所有需要执行的用户脚本
+    list *scripts_queue;
+} sentinel;
+
+// 被 Sentinel 监视的实例结构
+typedef struct sentinelRedisInstance {
+    // 标识值，记录了实例的类型，以及该实例的当前状态
+    int flags;
+    // 实例的名字，主服务器的名字由用户在配置文件中设置
+    char *name;
+    // 实例的运行ID
+    char *runid;
+    // 配置纪元，用于实现故障转移
+    uint64_t config_epoch;
+    // 实例的地址
+    sentinelAddr *addr;
+    // 实例无响应多少毫秒之后才会被判断为主观下线
+    mstime_t down_after_period;
+    // 判断这个实例为客观下线所需的支持投票数量
+    int quorum;
+    // 在执行故障转移操作时，可以同时对新的主服务器进行同步的从服务器数量
+    int parallel_syncs;
+    // 刷新故障迁移状态的最大时限
+    mstime_t failover_timeout;
+    // ...
+} sentinelRedisInstance;
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><p><img src="`+p+'" alt="Alt text"></p><h3 id="主观下线" tabindex="-1"><a class="header-anchor" href="#主观下线" aria-hidden="true">#</a> 主观下线</h3><ol><li>Sentinel 会定时（每秒一次）向与它进行连接的服务（主服务器，从服务器，其他 Sentinel）发送 Ping 命令</li><li>如果在规定的时间内没有返回有效回复，会修改对应实例结构的 flags 属性为 <code>SRI_S_DOWN</code><ol><li>规定的时间由配置文件中的<code>down-after-milliseconds</code>选项决定</li><li>有效回复包含：+PONG, -LOADING, -MASTERDOWN</li></ol></li></ol><p><strong>注意</strong>：不同 sentinel 的主观下线时长可以不同</p><h3 id="客观下线" tabindex="-1"><a class="header-anchor" href="#客观下线" aria-hidden="true">#</a> 客观下线</h3><p>当一个 Sentinel 将一个主服务器判断为主观下线后，为了确认该主服务器是否下线，会询问其他 Sentinel 是否也认为该主服务器下线，当一定数量的 Sentinel 认为该主服务器下线，就判定为客观下线，进行故障转移操作。</p><ol><li>询问其他 Sentinel: <code>SENTINEL is-master-down-by-addr ＜ip＞ ＜port＞ ＜current_epoch＞ ＜runid＞</code></li><li>其他 Sentinel 接收该并分析该命令，检查主服务器是否下线，然后返回结果：<code>1) ＜down_state＞ 2)＜leader_runid＞ 3)＜leader_epoch＞</code></li><li>接收回复命令，进行统计，当同意下线的 Sentinel 数量大于等于 <code>quorum</code>，判定该主服务器客观下线</li></ol><p><strong>注意</strong>：不同 sentinel 的客观下线数量可以不同</p><h3 id="选举领头-sentinel" tabindex="-1"><a class="header-anchor" href="#选举领头-sentinel" aria-hidden="true">#</a> 选举领头 Sentinel</h3><p>在进行故障转移操作前，需要选举出一个 leader 去进行具体的转移操作，每一个 Sentinel 都有被选举为 leader 的机会</p><ol><li>确认主服务器客观下线的 Sentinel 会参与 leader 的竞选，要求其他 Sentinel 设置自己为局部 leader</li><li>每个 Sentinel 只有一次设置局部 leader 的机会，所以遵循先到先得的规则，谁的投票请求先到，就将谁设置为局部 leader</li><li>每个参数竞选的 Sentinel 会统计自己获取的局部 leader 票数 <ol><li>若超过半数，则其就成为真正的 leader，进行后继的故障转移操作</li><li>若为超过，则重新竞选</li></ol></li></ol><h3 id="故障转移" tabindex="-1"><a class="header-anchor" href="#故障转移" aria-hidden="true">#</a> 故障转移</h3><ol><li>从已经下线的主服务器的从服务器中选出一个作为新的主服务器 <ol><li>删除已经下线或者处于断线状态的从服务器，保证剩下的从服务器是正常在线的</li><li>删除 5s 内没有回复领头 Sentinel 的 INFO 命令的，保证剩余的服务器最近的通信都是成功的</li><li>删除所有与已下线的主服务器连接断开草稿 <code>down-after-milliseconds * 10</code> 毫秒的从服务器，保证剩余的从服务器中保存的数据是比较新的</li><li>根据从服务器的优先级进行排序，选出优先级最高的从服务器 <ol><li>如果有多个最高优先级相同的从服务器，那么会选择复制偏移量最大的从服务器</li><li>如果最大复制偏移量也有多个，选择运行ID最小的从服务器</li></ol></li></ol></li><li>当新的主服务器出现后，领头 Sentinel 向剩下的从服务器发送 SLAVEOF 命令，让它们对主服务器进行复制操作，保证数据的一致性（弱一致性）</li><li>监视已下线的旧主服务器，如果再次上线，将其设置为新主服务器的从服务器</li></ol><h2 id="集群" tabindex="-1"><a class="header-anchor" href="#集群" aria-hidden="true">#</a> 集群</h2><p>一个集群由多个节点组成，通过 <code>CLUSTER MEET &lt;ip&gt; &lt;port&gt;</code> 命令添加节点 <img src="'+g+'" alt="Alt text"></p><h3 id="数据分片" tabindex="-1"><a class="header-anchor" href="#数据分片" aria-hidden="true">#</a> 数据分片</h3><p>Redis 集群通过分片的方式保存键值对，整个集群分为 16384 个槽，每个节点可以处理的槽在 0 ~ 16384 之间。当所有的槽都有节点在处理时，集群处于上线状态；如果有一个槽没有被处理，集群则处于下线状态。使用 <code>CLUSTER ADDSLOTS ＜slot＞ [slot ...]</code> 命令进行槽分配。</p><ol><li>根据键值对的 key，安装 CRC16 算法计算一个16bit的值</li><li>再用 16bit 值对 16384 取模，得到一个在 0~16384 范围内的数值，每个数值代表对应的编号的哈希槽</li></ol>',104),x=[_];function y(S,k){return e(),n("div",null,x)}const z=i(f,[["render",y],["__file","Redis.html.vue"]]);export{z as default};

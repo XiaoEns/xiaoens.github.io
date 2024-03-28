@@ -1,0 +1,1 @@
+const e=JSON.parse('{"key":"v-35f94b75","path":"/books/Go/go-zero.html","title":"Go-Zero","lang":"en-US","frontmatter":{"title":"Go-Zero","date":"2023/12/20"},"headers":[],"git":{"createdTime":1711590928000,"updatedTime":1711590928000,"contributors":[{"name":"xiaoen","email":"3219405547@qq.com","commits":1}]},"filePathRelative":"books/Go/go-zero.md"}');export{e as data};
