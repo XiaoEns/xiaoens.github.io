@@ -38,6 +38,13 @@ git push origin :分支名
 
 # 关联分支
 git branch --set-upstream-to=origin/远程分支 本地分支
+
+# 回退分支
+git reset HEAD^           # 回退到上一个版本，暂存区中的内容被重置，工作区保持不变
+git reset HEAD^ xx.file   # 回退某一个文件到上一个版本
+git reset commitID        # 回退到指定版本 
+git reset --soft commitID # 回退到指定版本，暂存区，工作区不会被重置
+git reset --hard commitID # 撤销工作区中未提交的修改内容，将暂存区和工作区的内容都回退到指定版本
 ```
 
 ## 仓库管理

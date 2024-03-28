@@ -25,13 +25,13 @@ http://nil.csail.mit.edu/6.824/2020/papers/raft-extended.pdf
 
 在任何时刻，每个服务器节点都处于 follower，candidate，leader 三种状态之一。
 
-任何一个节点启动时会将自己设置为 follower 状态，当察觉到当前集群中没有 leader，会将自己的状态切换到 candidate 状态，在 candidate 中经历一次或多次选举后，更加选举的结果决定自己切换到 leader 还是 follower 状态。
+任何一个节点启动时会将自己设置为 follower 状态，当察觉到当前集群中没有 leader，会将自己的状态切换到 candidate 状态，在 candidate 中经历一次或多次选举后，根据选举的结果决定自己切换到 leader 还是 follower 状态。
 
 ![Alt text](image/image5.png)
 
 Raft 把时间分割成任意长度的任期(term)，任期用连续的整数标记。
 
-每一段任期从一次选举开始。在某些情况下，一次选举无法选出 leader (比如两个节点收到了相同的票数)， 在这种情况下，这一任期会以没有 leader 结束; 一个新的任期(包含一次新的选举)会很快重新开始。Raft 保证在任意一个任期内， 最多只有一个 leader。
+每一段任期从一次选举开始。在某些情况下，一次选举无法选出 leader (比如两个节点收到了相同的票数)， 在这种情况下，这一任期会以没有 leader 结束; 一个新的任期(包含一次新的选举)会很快重新开始。**Raft 保证在任意一个任期内， 最多只有一个 leader**。
 
 Raft 中的节点使用 RPC 进行通信，主要有两种 RPC:
 + `RequestVote RPC`：请求投票，由 candidate 在选举期间发起
@@ -64,24 +64,6 @@ type RequestVoteResponse struct {
        + 在有多个 follower 同时成为 candidate 时，有可能存在得票太过分散的情况，会发生没有任何一个 candidate 得票数超过半数的结果
 
 ## 日志复制
-
-在 leader 被选举出来之后，开始为客户端请求提供服务
-
-1. leader 接收到客户端指令后，会把指令作为一个新的条目追加到**日志**中。一个日志中需要具有三个信息
-   + 状态机指令
-   + leader 的任期号
-   + 日志索引
-2. leader 并行的发送 AppendEntries RPC 给 followers，让它们复制该条目。当该条目被超半数的 follower 复制后，leader 就可以在本地执行该指令并把结果返回客户端
-
-![Alt text](image/image6.png)
-
-在此过程中，leader 或 follower随时都有崩溃或缓慢的可能性，Raft必须要在有宕机的情况下继续支持日志复制，并且保证每个副本日志顺序的一致(以保证复制状态机的实现)。具体有三种可能:
-1. 如果有 follower 因为某些原因没有给 leader 响应，那么 leader 会不断地重发追加条目请求(AppendEntries RPC)，哪怕 leader 已经回复 了客户端
-2. 如果有 follower 崩溃后恢复，这时 Raft 追加条目的**一致性检查**生效，保证 follower 能按顺序恢复崩溃后的缺失的日志
-   + Raft 的一致性检查: leader 在每一个发往 follower 的追加条目RPC中，会放入前一个日志条目的索引位置和任期号，如果 follower 在它的日志中找不到前一个日志，那么它就会拒绝此日志，leader 收到 follower 的拒绝后，会发送前一个日志条目，从而逐渐向前定位到follower第一个缺失的日志
-3. 如果 leader 崩溃，那么崩溃的 leader 可能已经复制了日志到部分follower但还没有提交，而被选出的新leader 又可能不具备这些日志，这样有部分 follower 中的日志和新leader中的日志不相同
-   + Raft 在这种情况下，leader 通过**强制 follower 复制它的日志**来解决不一致问题，这意味着 follower 中跟 leader 冲突的日志条目会被新leader的日志条目覆盖（因为没有提交，所以不违背外部一致性）
-
 ```go
 // 追加日志 RPC Request
 type AppendEntriesRequest struct {
@@ -99,7 +81,31 @@ type AppendEntriesResponse struct {
     success bool // 如果 follower 包括前一个日志，则返回 true
 }
 ```
-follower 在接收到追加条目RPC后，如果发现 leaderCommit > commitIndex，那么把自己的 commitIndex 设置为 min(leaderCommit, index of last new entry)
+在 leader 被选举出来之后，开始为客户端请求提供服务
+
+1. leader 接收到客户端指令后，会把指令作为一个新的条目追加到**日志**中。一个日志中需要具有三个信息
+   + 状态机指令
+   + leader 的任期号
+   + 日志索引
+2. leader 并行的发送 AppendEntries RPC 给 followers，让它们复制该条目。当该条目被超半数的 follower 复制后，leader 就可以在本地执行该指令并把结果返回客户端
+
+![Alt text](image/image6.png)
+
+在此过程中，leader 或 follower随时都有崩溃或缓慢的可能性，Raft必须要在有宕机的情况下继续支持日志复制，并且保证每个副本日志顺序的一致(以保证复制状态机的实现)。具体有三种可能:
+1. 如果有 follower 因为某些原因没有给 leader 响应，那么 leader 会不断地重发追加条目请求(AppendEntries RPC)，哪怕 leader 已经回复 了客户端
+2. 如果有 follower 崩溃后恢复，这时 Raft 追加条目的**一致性检查**生效，保证 follower 能按顺序恢复崩溃后的缺失的日志
+   + Raft 的一致性检查: leader 在每一个发往 follower 的追加条目RPC中，会放入前一个日志条目的索引位置和任期号，如果 follower 在它的日志中找不到前一个日志，那么它就会拒绝此日志，leader 收到 follower 的拒绝后，会发送前一个日志条目，从而逐渐向前定位到follower第一个缺失的日志
+3. 如果 leader 崩溃，那么崩溃的 leader 可能已经复制了日志到部分follower但还没有提交，而被选出的新leader 又可能不具备这些日志，这样有部分 follower 中的日志和新leader中的日志不相同
+
+![alt text](image/image8.png)
+> 当一个领导人成功当选时，跟随者可能是任何情况（a-f）,每一个盒子表示是一个日志条目；里面的数字表示任期号。
+> 跟随者可能会缺少一些日志条目（a-b）
+> 可能会有一些未被提交的日志条目（c-d）
+> 或者两种情况都存在（e-f）。
+> 
+> 例如，场景 f 可能会这样发生，某服务器在任期 2 的时候是领导人，已附加了一些日志条目到自己的日志中，但在提交之前就崩溃了；很快这个机器就被重启了，在任期 3 重新被选为领导人，并且又增加了一些日志条目到自己的日志中；在任期 2 和任期 3 的日志被提交之前，这个服务器又宕机了，并且在接下来的几个任期里一直处于宕机状态。
+
+Raft 在这种情况下，leader 通过**强制 follower 复制它的日志**来解决不一致问题，这意味着 follower 中跟 leader 冲突的日志条目会被新leader的日志条目覆盖（因为没有提交，所以不违背外部一致性）
 
 ### no-op
 no-operation: 当一个节点当选 leader 后，立刻发送一个自己当前任期的空日志体的 AppendEntries RPC，这样可以把之前任期内满足提交条件的日志都提交了

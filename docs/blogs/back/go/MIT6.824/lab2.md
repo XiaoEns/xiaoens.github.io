@@ -10,8 +10,6 @@ categories:
 ## 准备
 + 论文:
   + Raft: <http://nil.csail.mit.edu/6.824/2020/papers/raft-extended.pdf>
-  + GFS: <http://nil.csail.mit.edu/6.824/2020/papers/gfs.pdf>
-  + Fault-Tolerant VM: <http://nil.csail.mit.edu/6.824/2020/papers/vm-ft.pdf>
 + Lab2 要求: <http://nil.csail.mit.edu/6.824/2020/labs/lab-raft.html>
 
 ## 任务分析
