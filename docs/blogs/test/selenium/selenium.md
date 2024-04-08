@@ -2,9 +2,9 @@
 title: Selenium安装使用
 date: 2024/03/27
 tags:
- - Go
+ - Selenium
 categories:
- - Go
+ - 自动化测试
 ---
 
 ## 介绍
@@ -37,6 +37,7 @@ Selenium本质上是由多种工具组合在一起的测试工具集合，包含
 
 1. 下载驱动：要使用 Selenium 需要下载对应浏览器的驱动
    + Chrome驱动下载地址：<https://chromedriver.chromium.org/downloads>
+   + 配置环境变量，将驱动所在的目录地址添加到Path环境变量中
 2. Selenium IDE: 可以在 Chrome 扩展商店下载，收缩`Selenium IDE`即可
 
 ## 使用
