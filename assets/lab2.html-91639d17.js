@@ -1,0 +1,31 @@
+import{_ as l,r as t,o as i,c as o,a as n,b as e,d as a,e as c}from"./app-52052bff.js";const d="/assets/image-4-cac3310d.png",p={},r=n("h2",{id:"准备",tabindex:"-1"},[n("a",{class:"header-anchor",href:"#准备","aria-hidden":"true"},"#"),e(" 准备")],-1),u={href:"http://nil.csail.mit.edu/6.824/2020/papers/raft-extended.pdf",target:"_blank",rel:"noopener noreferrer"},m={href:"http://nil.csail.mit.edu/6.824/2020/labs/lab-raft.html",target:"_blank",rel:"noopener noreferrer"},b=c(`<h2 id="任务分析" tabindex="-1"><a class="header-anchor" href="#任务分析" aria-hidden="true">#</a> 任务分析</h2><p>Lab2 需要实现 Raft，包括领导者选举，日志复制，安全性以及持久化</p><p>Lab2 分成了3部分：</p><ul><li>lab2A-领导者选举 <ul><li>正常的选举，需要维护 Follower 的状态</li><li>Leader 崩溃后的正常运行，能够选出新的 Leader</li></ul></li><li>lab2b-日志复制 <ul><li>正常的复制</li><li>在 Follower 崩溃后，再重新上线，需要同步 Leader 的日志</li><li>在 Leader 崩溃后，新Leader 能够正常运行，并且如果旧Leader 重新上线后，需要同步新Leader的日志</li><li>需要处理 Leader 和 Follower 之间日志的不一致</li></ul></li><li>lab3b-持久化 <ul><li>服务器重启能够从原位置恢复服务，需要考虑持久化时机以及持久化的数据</li></ul></li></ul><h2 id="设计实现" tabindex="-1"><a class="header-anchor" href="#设计实现" aria-hidden="true">#</a> 设计实现</h2><p>安装 Raft 论文的描述来设计 AppendEntries RPC 和 Vote RPC</p><div class="language-go line-numbers-mode" data-ext="go"><pre class="language-go"><code><span class="token keyword">type</span> RequestVoteArgs <span class="token keyword">struct</span> <span class="token punctuation">{</span>
+  Term         <span class="token builtin">int</span> <span class="token comment">// 当前任期号</span>
+  CandidateId  <span class="token builtin">int</span> <span class="token comment">// 当前Candidate的ID</span>
+  LastLogIndex <span class="token builtin">int</span> <span class="token comment">// 当前最后一个日志条目的索引</span>
+  LastLogTerm  <span class="token builtin">int</span> <span class="token comment">// 当前最后一个日志条目的任期</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">type</span> RequestVoteReply <span class="token keyword">struct</span> <span class="token punctuation">{</span>
+  Term        <span class="token builtin">int</span>  <span class="token comment">// 当前任期号</span>
+  VoteGranted <span class="token builtin">bool</span> <span class="token comment">// 是否投票</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">type</span> AppendEntriesRequest <span class="token keyword">struct</span> <span class="token punctuation">{</span>
+  Term         <span class="token builtin">int</span>        <span class="token comment">// 当前任期号</span>
+  LaderId      <span class="token builtin">int</span>        <span class="token comment">// 当前Leader的ID</span>
+  PervLogIndex <span class="token builtin">int</span>        <span class="token comment">// Follower前一个日志的索引</span>
+  PrevLogTerm  <span class="token builtin">int</span>        <span class="token comment">// Follower前一个日志的任期</span>
+  Log          <span class="token punctuation">[</span><span class="token punctuation">]</span>LogEntry <span class="token comment">// 日志条目</span>
+  LeaderCommit <span class="token builtin">int</span>        <span class="token comment">// Leader 已经提交的日志索引</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">type</span> AppendEntriesResponse <span class="token keyword">struct</span> <span class="token punctuation">{</span>
+  Term    <span class="token builtin">int</span>  <span class="token comment">// 当前任期号</span>
+  Success <span class="token builtin">bool</span> <span class="token comment">// 是否复制成功</span>
+  XTerm   <span class="token builtin">int</span>  <span class="token comment">// 发生冲突的日志任期</span>
+  XIndex  <span class="token builtin">int</span>  <span class="token comment">// 发生冲突的日志索引</span>
+<span class="token punctuation">}</span>
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><p>Raft 结构</p><div class="language-go line-numbers-mode" data-ext="go"><pre class="language-go"><code><span class="token keyword">type</span> Raft <span class="token keyword">struct</span> <span class="token punctuation">{</span>
+
+<span class="token punctuation">}</span>
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h2 id="测试" tabindex="-1"><a class="header-anchor" href="#测试" aria-hidden="true">#</a> 测试</h2><p>运行测试程序：<code>go test -run 2A</code>，<code>go test -run 2B</code>，<code>go test -run 2C</code>，<code>go test</code></p><p><img src="`+d+'" alt="Alt text"></p><blockquote><p>Test (2B): leader backs up quickly over incorrect follower logs 超过半数跟随者宕机，领导人在期间接收很多日志(应该丢弃的)， 然后宕机，原来宕机的跟随者 恢复，并且新领导人接收很多日志，然后新领导人宕机，宕机后接收很多日志 在这个情况下测试是否日志正确(未提交的日志会被覆盖) TestBackUp：</p></blockquote><ol><li>启动五个节点，进行选举，选举结果为一个Leader 和 4个 follower</li><li>选举完成后，client 发送一条 日志，Leader 通过 AppendEntries RPC 发送给其他 follower</li><li>client 接着发送 50 条日志，这时候会下线3个follower，此时系统中有1个Leader和1个follower</li></ol><h2 id="总结" tabindex="-1"><a class="header-anchor" href="#总结" aria-hidden="true">#</a> 总结</h2>',15);function k(v,h){const s=t("ExternalLinkIcon");return i(),o("div",null,[r,n("ul",null,[n("li",null,[e("论文: "),n("ul",null,[n("li",null,[e("Raft: "),n("a",u,[e("http://nil.csail.mit.edu/6.824/2020/papers/raft-extended.pdf"),a(s)])])])]),n("li",null,[e("Lab2 要求: "),n("a",m,[e("http://nil.csail.mit.edu/6.824/2020/labs/lab-raft.html"),a(s)])])]),b])}const g=l(p,[["render",k],["__file","lab2.html.vue"]]);export{g as default};

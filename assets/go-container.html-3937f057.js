@@ -1,0 +1,1 @@
+import{_ as e,o as t,c as o,a as n}from"./app-52052bff.js";const c={},s=n("p",null,"https://juejin.cn/post/7042729165400834056",-1),_=[s];function a(r,l){return t(),o("div",null,_)}const d=e(c,[["render",a],["__file","go-container.html.vue"]]);export{d as default};

@@ -1,0 +1,30 @@
+import{_ as s,o as n,c as a,e}from"./app-52052bff.js";const i="/assets/image-23776878.png",l="/assets/image-1-7376b7bb.png",c="/assets/image-2-d873c26a.png",o={},t=e('<h2 id="下载" tabindex="-1"><a class="header-anchor" href="#下载" aria-hidden="true">#</a> 下载</h2><p>下载地址：https://github.com/voidint/g/releases</p><h2 id="环境变量配置" tabindex="-1"><a class="header-anchor" href="#环境变量配置" aria-hidden="true">#</a> 环境变量配置</h2><p><img src="'+i+'" alt="Alt text"></p><ul><li><code>G_HOME</code>: g 工作空间，刚刚下载的文件所在的目录</li><li><code>G_MIRROR</code>: 下载镜像地址</li><li><code>GOPATH</code>: 你 go 代码存放的文件夹</li><li><code>GOROOT</code>: <code>%G_HOME%\\go</code>，使用 g 下载 go 的时候，会放到这个文件夹中</li><li><code>G_EXPERIMENTAL</code>: g 默认将下载的 go 放在系统盘下，如果你想自定义 go 的使用目录，则需要在 release 中下载 1.2.1 以后的版本</li></ul><p>将 <code>G_HOME</code>，<code>GOPATH</code>，<code>GOROOT</code> 放入 <code>Path</code> 中</p><p><img src="'+l+'" alt="Alt text"></p><h2 id="验证" tabindex="-1"><a class="header-anchor" href="#验证" aria-hidden="true">#</a> 验证</h2><p>cmd 打开命令行窗口，输入 g，出现以下界面，说明安装成功</p><p><img src="'+c+`" alt="Alt text"></p><h2 id="操作" tabindex="-1"><a class="header-anchor" href="#操作" aria-hidden="true">#</a> 操作</h2><ul><li><code>g ls-remote</code>：查看远程所有的 go 版本<div class="language-bash line-numbers-mode" data-ext="sh"><pre class="language-bash"><code>C:<span class="token punctuation">\\</span>Users<span class="token punctuation">\\</span><span class="token number">3219</span><span class="token operator"><span class="token file-descriptor important">4</span>&gt;</span>g ls-remote
+<span class="token number">1</span>
+<span class="token number">1.2</span>.2
+<span class="token number">1</span>.3rc1
+<span class="token number">1</span>.3rc2
+<span class="token number">1.3</span>
+<span class="token number">1.3</span>.1
+<span class="token number">1.3</span>.2
+<span class="token number">1.3</span>.3
+<span class="token number">1</span>.4beta1
+<span class="token number">1</span>.4rc1
+<span class="token number">1</span>.4rc2
+<span class="token number">1.4</span>
+<span class="token number">1.4</span>.1
+<span class="token number">1.4</span>.2
+<span class="token number">1.4</span>.3
+<span class="token punctuation">..</span><span class="token punctuation">..</span><span class="token punctuation">..</span>
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div></li><li><code>g install xxx.xxx</code>：下载 go 指定版本<div class="language-bash line-numbers-mode" data-ext="sh"><pre class="language-bash"><code>C:<span class="token punctuation">\\</span>Users<span class="token punctuation">\\</span><span class="token number">3219</span><span class="token operator"><span class="token file-descriptor important">4</span>&gt;</span>g <span class="token function">install</span> <span class="token number">1.8</span>
+Downloading <span class="token number">100</span>% <span class="token punctuation">[</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">=</span><span class="token punctuation">]</span> <span class="token punctuation">(</span><span class="token number">96</span>/96 MB, <span class="token number">1.5</span> MB/s<span class="token punctuation">)</span>
+Computing checksum with SHA256
+Checksums matched
+Now using go1.8
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div></li><li><code>g ls</code>：查看本地所有的 go 版本<div class="language-bash line-numbers-mode" data-ext="sh"><pre class="language-bash"><code>C:<span class="token punctuation">\\</span>Users<span class="token punctuation">\\</span><span class="token number">3219</span><span class="token operator"><span class="token file-descriptor important">4</span>&gt;</span>g <span class="token function">ls</span>
+* <span class="token number">1.8</span>
+  <span class="token number">1.20</span>
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div></li><li><code>g use xxx.xxx</code>：切换到指定 go 版本<div class="language-bash line-numbers-mode" data-ext="sh"><pre class="language-bash"><code>C:<span class="token punctuation">\\</span>Users<span class="token punctuation">\\</span><span class="token number">3219</span><span class="token operator"><span class="token file-descriptor important">4</span>&gt;</span>g use <span class="token number">1.20</span>
+go version go1.20 windows/amd64
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div></div></div></li><li><code>g uninstall xxx.xxx</code>：删除指定版本<div class="language-bash line-numbers-mode" data-ext="sh"><pre class="language-bash"><code>C:<span class="token punctuation">\\</span>Users<span class="token punctuation">\\</span><span class="token number">3219</span><span class="token operator"><span class="token file-descriptor important">4</span>&gt;</span>g uninstall <span class="token number">1.8</span>
+Uninstalled go1.14.7
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div></div></div></li></ul>`,12),p=[t];function r(d,u){return n(),a("div",null,p)}const b=s(o,[["render",r],["__file","g.html.vue"]]);export{b as default};
